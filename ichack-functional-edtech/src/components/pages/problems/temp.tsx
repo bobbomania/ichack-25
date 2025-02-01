@@ -15,14 +15,29 @@ import {
 import '@xyflow/react/dist/style.css';
 import { DnDProvider, useDnD } from './DnDContext';
 import BottomDragBar from './BottomDragBar';
+import { ShapeData } from '@/components/nodes/ShapeData';
+import { ShapeType } from '@/components/nodes/Type';
+import CustomNode from '@/components/nodes/CustomNode';
  
-  
+// Define node types
+const nodeTypes = {
+  customNode: CustomNode,
+};
+
+const objectNode1 = new ShapeData(10, 'red', ShapeType.CIRCLE)
+const objectNode2 = new ShapeData(10, 'red', ShapeType.TRIANGLE)
 const initialNodes = [
   {
-    id: '1',
-    type: 'input',
-    data: { label: 'input node' },
+    id: "1",
+    type: "customNode",
     position: { x: 250, y: 5 },
+    data: { objectNode1 },
+  },
+  {
+    id: "2",
+    type: "customNode",
+    position: { x: 100, y: 100 },
+    data: { objectNode2 },
   },
 ];
  
