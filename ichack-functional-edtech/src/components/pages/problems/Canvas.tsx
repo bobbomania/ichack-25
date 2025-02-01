@@ -4,11 +4,9 @@ import React from "react";
 import { ReactFlow, Background, Controls, useNodesState, useEdgesState } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import CustomNode from "@/components/nodes/CustomNode";
-import ObjectNode from "@/components/nodes/ObjectNode";
-import Circle from "@/components/nodes/Circle";
-import { ShapeType, Type } from "@/components/nodes/Type";
-import DataObject from "@/components/nodes/DataObject";
-import { ShapeData } from "@/components/nodes/ShapeData";
+import { ShapeEnum } from "@/components/nodes/Type";
+import { ShapeData } from "@/components/nodes/data/ShapeData";
+import { MakeRed } from "@/components/nodes/functions/Colour";
 
 // Define node types
 const nodeTypes = {
@@ -16,19 +14,20 @@ const nodeTypes = {
 };
 
 // Create an ObjectNode instance
-const objectNode = new ShapeData(10, 'red', ShapeType.CIRCLE)
+const objectNode = new ShapeData(10, 'red', ShapeEnum.CIRCLE)
+const redNode = new MakeRed();
 const initialNodes = [
   {
     id: "1",
     type: "customNode",
     position: { x: 250, y: 5 },
-    data: { objectNode },
+    data: { 'objectNode': objectNode },
   },
   {
     id: "2",
     type: "customNode",
     position: { x: 100, y: 100 },
-    data: { objectNode },
+    data: { 'objectNode': redNode },
   },
 ];
 

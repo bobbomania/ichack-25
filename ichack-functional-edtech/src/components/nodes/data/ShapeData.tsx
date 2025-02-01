@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Type, ShapeType } from "./Type";
+import { TypeEnum, ShapeEnum } from "../Type";
 import DataObject from "./DataObject";
 
 // Circle Component that accepts size and color as props
@@ -46,20 +46,20 @@ export class ShapeData extends DataObject {
       constructor(
         protected size:  number,
         protected color: string,
-        protected shapeType: ShapeType,
+        protected shapeType: ShapeEnum,
       ) {
         
         var comp: ReactNode = null;
         switch (shapeType) {
-            case ShapeType.CIRCLE: 
+            case ShapeEnum.CIRCLE: 
                 comp = CircleComponent({size, color});
                 break;
             
-            case ShapeType.TRIANGLE:
+            case ShapeEnum.TRIANGLE:
                 comp = TriangleComponent({size, color});
                 break;
             
-            case ShapeType.RECTANGLE:
+            case ShapeEnum.RECTANGLE:
                 comp = RectangleComponent({size, color});
                 break;
             default:
@@ -68,7 +68,7 @@ export class ShapeData extends DataObject {
         }
 
         // Call the parent class constructor (ObjectNode)
-        super(comp, [Type.SHAPE]);
+        super(comp, [TypeEnum.SHAPE]);
       }
 
       logic(inputs: any[]): any[] {
