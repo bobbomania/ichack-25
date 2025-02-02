@@ -6,8 +6,9 @@ import "@xyflow/react/dist/style.css";
 import CustomNode from "@/components/nodes/CustomNode";
 import { ShapeEnum } from "@/components/nodes/Type";
 import { ShapeData } from "@/components/nodes/data/ShapeData";
-import { MakeRed } from "@/components/nodes/functions/Colour";
+import { MakeBlue, MakeRed } from "@/components/nodes/functions/Colour";
 import { motion, AnimatePresence } from "framer-motion";
+import EndNode from "@/components/nodes/EndNode";
 
 // Define node types
 const nodeTypes = {
@@ -17,18 +18,28 @@ const nodeTypes = {
 // Create an ObjectNode instance
 const objectNode = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
 const redNode = new MakeRed();
+const blueNode = new MakeBlue();
+const endNode = EndNode;
+
 const initialNodes = [
   {
     id: "1",
     type: "customNode",
     position: { x: 250, y: 5 },
     data: { objectNode },
+    draggable: false,
   },
   {
     id: "2",
     type: "customNode",
     position: { x: 100, y: 100 },
-    data: { objectNode: redNode },
+    data: { objectNode: blueNode },
+  },
+  {
+    id: "3",
+    type: "customNode",
+    position: { x: 50, y: 100 },
+    data: { objectNode: endNode },
   },
 ];
 
@@ -60,6 +71,7 @@ const Flow = () => {
           targetNode.data.objectNode.connectInput(typeConnected, sourceNode.data.objectNode);
           setEdges((eds) => addEdge(params, eds));
         } else {
+          console.log(`${targetNode.position.x} and ${targetNode.position.y}`)
           showError("❌ Cannot connect these nodes!", {
             x: targetNode.position.x,
             y: targetNode.position.y,

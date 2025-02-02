@@ -1,9 +1,12 @@
+import React, { ReactElement, ReactNode } from "react";
 import { TypeEnum } from "../Type";
 import FunctionNode from "./Function";
+import DataObject from "../data/DataObject";
+import { ShapeData } from "../data/ShapeData";
 
 export class MakeRed extends FunctionNode {  
     constructor() {
-      super("Make Red", [TypeEnum.SHAPE], [TypeEnum.SHAPE]);
+      super("Make Red", [TypeEnum.NUMBER], [TypeEnum.SHAPE]);
     }
   
     // Logic method that changes the color of shape objects
@@ -35,10 +38,11 @@ export class MakeBlue extends FunctionNode {
   }
 
   // Logic method that changes the color of shape objects
-  logic(inputs: any[]): any[] {
-    return inputs.map((shape) => ({
-      ...shape,
-      color: 'blue',
-    }));
+  logic(inputs: ShapeData[][]): DataObject[] {
+    var out: DataObject[] = inputs.map((shape: ShapeData[], index) => {
+        return new ShapeData(shape[0].size, 'blue', shape[0].shapeType)
+    });
+  
+    return out;
   }
 }

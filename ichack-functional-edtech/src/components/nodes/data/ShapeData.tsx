@@ -44,9 +44,9 @@ const CircleComponent = ({ size, color }: ShapeProps) => {
   
 export class ShapeData extends DataObject {
       constructor(
-        protected size:  number,
-        protected color: string,
-        protected shapeType: ShapeEnum,
+        public size:  number,
+        public color: string,
+        public shapeType: ShapeEnum,
       ) {
         
         var comp: ReactNode = null;
@@ -72,6 +72,6 @@ export class ShapeData extends DataObject {
       }
 
       logic(inputs: any[]): any[] {
-        return [{'size': this.size, 'color': this.color}];
+        return [this]
       }
 }

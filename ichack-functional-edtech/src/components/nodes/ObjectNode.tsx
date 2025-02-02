@@ -1,81 +1,99 @@
-import { ReactNode } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 import { TypeEnum } from "./Type";
-
-// Define the types for inputs and outputs
+import DataObject from "./data/DataObject";
 
 export abstract class ObjectNode {
-  protected componentData: ReactNode;
-  protected inputTypes: [TypeEnum, ObjectNode  | null][];
+  protected inputTypes: [TypeEnum, ObjectNode | null][];
   protected outputTypes: TypeEnum[];
+  protected setComponentData!: (data: ReactNode) => void;
+  protected currentComponentData!: ReactNode;
 
-  constructor(
-    componentData: ReactNode,
-    inputTypes: TypeEnum[],
-    outputTypes: TypeEnum[]
-  ) {
-    this.componentData = componentData;
-    // Initialize input and output links with null values
+  constructor(componentData: ReactNode, inputTypes: TypeEnum[], outputTypes: TypeEnum[]) {
+    this.currentComponentData = componentData;
     this.inputTypes = inputTypes.map((type) => [type, null]);
     this.outputTypes = outputTypes;
   }
 
-  // Render function returns the React component
-  render(): ReactNode {
-    return this.componentData;
+  // Attach setState from functional component to the class
+  attachSetState(setStateFn: (data: ReactNode) => void) {
+    this.setComponentData = setStateFn;
   }
 
-  // Example method to set an input link
+  updateComponentData(newData: ReactNode): void {
+    this.currentComponentData = newData;
+    if (this.setComponentData) {
+      this.setComponentData(newData);
+    }
+  }
+
+  render(): ReactNode {
+    return this.currentComponentData;
+  }
+
   canConnectToInput(types: TypeEnum[]): TypeEnum | null {
-    for (var i=0; i < this.inputTypes.length; i++) {
-      var currInput = this.inputTypes[i];
-      for (var j=0; j < types.length; j++) {
-        if (currInput[1] == null && currInput[0] == types[j]) {
+    for (let i = 0; i < this.inputTypes.length; i++) {
+      const currInput = this.inputTypes[i];
+      for (let j = 0; j < types.length; j++) {
+        if (currInput[1] == null && (currInput[0] === types[j] || currInput[0] === TypeEnum.ANY)) {
           return types[j];
         }
       }
     }
-
     return null;
   }
 
   connectInput(type: TypeEnum, obj: ObjectNode): void {
-    for (var i=0; i < this.inputTypes.length; i++) {
-      if (this.inputTypes[i][0] == type) {
+    for (let i = 0; i < this.inputTypes.length; i++) {
+      if (this.inputTypes[i][0] === type || this.inputTypes[i][0] === TypeEnum.ANY) {
         this.inputTypes[i][1] = obj;
         return;
       }
     }
   }
 
-  // Get all input links
   getInputTypes(): [TypeEnum, any][] {
     return this.inputTypes;
   }
 
-  // Get all output links
   getOutputTypes(): TypeEnum[] {
     return this.outputTypes;
   }
 
-    // The run method that does something with the inputs and outputs
-    run(): any {
-      // Example logic for running the function: process inputs and produce outputs
-      const inputs = this.getInputTypes().map(([type, value]) => value);
-      const outputs = this.logic(inputs);  // Call the logic method
-  
-      // caching
-      // // Set the output values
-      // this.getOutputTypes().forEach(([type, output], index) => {
-      //   // Assuming we map outputs to corresponding links
-      //   this.outputTypes[index][1] = outputs[index];  // Set output value
-      // });
-  
-      return outputs;
+  run(): DataObject[] {
+    const evalInputs: DataObject[][] = [];
+
+    for (let i = 0; i < this.inputTypes.length; i++) {
+      
+      const currObj = this.inputTypes[i][1];
+      if (currObj != null) {
+        evalInputs.push(currObj.run());
+      }
     }
 
+    const outputs = this.logic(evalInputs);
 
-// Abstract method where the function's logic is implemented by subclasses
-abstract logic(inputs: any[]): any[];  
+    return outputs;
+  }
+
+  abstract logic(inputs: DataObject[][]): DataObject[];
 }
+
+// Functional Wrapper Component
+export const ObjectNodeWrapper = ({
+  nodeInstance,
+}: {
+  nodeInstance: ObjectNode;
+}) => {
+  const [componentData, setComponentData] = useState<ReactNode>(
+    nodeInstance.render()
+  );
+
+  // Attach setState handler to the class instance
+  useEffect(() => {
+    nodeInstance.attachSetState(setComponentData);
+  }, [nodeInstance]);
+
+  return <>{componentData}</>;
+};
 
 export default ObjectNode;
