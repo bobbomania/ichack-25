@@ -1,17 +1,17 @@
-import React, { ReactNode } from "react";
-import { InputOutputType, Type } from "./Type";
+import { ReactNode } from "react";
+import { TypeEnum } from "./Type";
 
 // Define the types for inputs and outputs
 
 export abstract class ObjectNode {
   protected componentData: ReactNode;
-  protected inputTypes: [InputOutputType, ObjectNode  | null][];
-  protected outputTypes: InputOutputType[];
+  protected inputTypes: [TypeEnum, ObjectNode  | null][];
+  protected outputTypes: TypeEnum[];
 
   constructor(
     componentData: ReactNode,
-    inputTypes: InputOutputType[],
-    outputTypes: InputOutputType[]
+    inputTypes: TypeEnum[],
+    outputTypes: TypeEnum[]
   ) {
     this.componentData = componentData;
     // Initialize input and output links with null values
@@ -25,24 +25,24 @@ export abstract class ObjectNode {
   }
 
   // Example method to set an input link
-  canConnectInput(type: InputOutputType, value: any, pos: number): boolean {
+  canConnectInput(type: TypeEnum, value: any, pos: number): boolean {
     const input = this.inputTypes[pos];
     return input[0] == type;
   }
 
   // Example method to set an input link
-  canConnectOutput(type: InputOutputType, value: any, pos: number): boolean {
+  canConnectOutput(type: TypeEnum, value: any, pos: number): boolean {
     const output = this.outputTypes[pos];
     return output[0] == type;
   }
 
   // Get all input links
-  getInputTypes(): [InputOutputType, any][] {
+  getInputTypes(): [TypeEnum, any][] {
     return this.inputTypes;
   }
 
   // Get all output links
-  getOutputTypes(): InputOutputType[] {
+  getOutputTypes(): TypeEnum[] {
     return this.outputTypes;
   }
 

@@ -3,12 +3,16 @@ import React from 'react';
 
 export interface BannerProps {
   description: string;
+  number: number;
 }
 
-const Banner = ({ description }: BannerProps) => {
+const Banner = ({ description, number }: BannerProps) => {
   return (
-    <div className="flex flex-col items-center p-4">
-      <p className="text-gray-600">{description}</p>
+    <div className="text-center">
+    <h2 className="text-4xl font-extrabold text-gray-900 mb-4">Problem {number}</h2>
+    <p className="text-xl text-gray-600">
+      {description}
+    </p>
     </div>
   );
 };

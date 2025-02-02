@@ -11,57 +11,106 @@ import {
   useReactFlow,
   Background,
 } from '@xyflow/react';
- 
+
 import '@xyflow/react/dist/style.css';
 import { DnDProvider, useDnD } from './DnDContext';
 import BottomDragBar from './BottomDragBar';
-import { ShapeData } from '@/components/nodes/ShapeData';
-import { ShapeType } from '@/components/nodes/Type';
+import { FuncEnum, ShapeEnum } from '@/components/nodes/Type';
 import CustomNode from '@/components/nodes/CustomNode';
- 
+import { MakeBlue, MakeGreen, MakeRed } from '@/components/nodes/functions/Colour';
+import { ShapeData } from '@/components/nodes/data/ShapeData';
+
 // Define node types
 const nodeTypes = {
   customNode: CustomNode,
 };
 
-const objectNode1 = new ShapeData(10, 'red', ShapeType.CIRCLE)
-const objectNode2 = new ShapeData(10, 'red', ShapeType.TRIANGLE)
-const initialNodes = [
-  {
-    id: "1",
-    type: "customNode",
-    position: { x: 250, y: 5 },
-    data: { 'objectNode':objectNode1 },
-  },
-  {
-    id: "2",
-    type: "customNode",
-    position: { x: 100, y: 100 },
-    data: { 'objectNode': objectNode2 },
-  },
-];
- 
+
+function createNodesFromObjects(objectNode1: ShapeData, objectNode2: ShapeData): any[] {
+  return [
+    {
+      id: "1",
+      type: "customNode",
+      position: { x: 250, y: 5 },
+      data: { objectNode: objectNode1 },
+    },
+    {
+      id: "2",
+      type: "customNode",
+      position: { x: 100, y: 100 },
+      data: { objectNode: objectNode2 },
+    },
+  ];
+}
+
+
+// Define a function that returns different node sets based on the input type
+function getStartNodes(num: number) {
+  console.log(num);
+  num = Number(num)
+  switch (num) {
+    case 1:
+      const objectNode1 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
+      const objectNode2 = new ShapeData(10, 'green', ShapeEnum.TRIANGLE);
+      console.log("here")
+      return createNodesFromObjects(objectNode1, objectNode2);
+
+    case 2:
+      const objectNode3 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
+      const objectNode4 = new ShapeData(10, 'blue', ShapeEnum.TRIANGLE);
+      return createNodesFromObjects(objectNode3, objectNode4);
+
+    case 3:
+      const objectNode5 = new ShapeData(10, 'green', ShapeEnum.RECTANGLE);
+      const objectNode6 = new ShapeData(10, 'blue', ShapeEnum.TRIANGLE);
+      return createNodesFromObjects(objectNode5, objectNode6);
+
+    default:
+      throw new Error(`no start '${num}' config that is recognised`);
+      
+  }
+}
+
+// Utility function to create new nodes based on type
+function createNewNode(name: string) {
+  switch (name) {
+    case FuncEnum.MAKE_RED:
+      return new MakeRed();
+    case FuncEnum.MAKE_GREEN:
+      return new MakeGreen();
+    case FuncEnum.MAKE_BLUE:
+      return new MakeBlue();
+    default:
+      throw new Error(`NotImplementedError: The node "${name}" is not supported.`);
+  }
+}
+
 let id = 0;
 const getId = () => `dndnode_${id++}`;
- 
-const DnDFlow = () => {
+
+// Define DnDFlow component which accepts `initialNodes` as a prop
+interface DnDFlowProps {
+  initialNodes: { id: string, type: string, position: { x: number, y: number }, data: any }[];
+}
+
+const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();
- 
+
   const onConnect = useCallback(
     // @ts-ignore
     (params: any) => setEdges((eds: any) => addEdge(params, eds)),
     [],
   );
- 
+
   const onDragOver = useCallback((event: any) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
- 
+
   const onDrop = useCallback(
     (event: any) => {
       event.preventDefault();
@@ -71,27 +120,28 @@ const DnDFlow = () => {
         x: event.clientX,
         y: event.clientY,
       });
-  
+
       console.log("Drop Position:", position);
-  
+      const nodeName = event.dataTransfer.getData('application/reactflow');
+      console.log('Dropped Node Name:', nodeName);
+
       // Create a new node at the drop position
       const newNode = {
         id: getId(), // Use the dynamic ID generator to avoid conflicts
         type: 'customNode', // Make sure the type is correct (it should match one of the types defined in nodeTypes)
         position, // Position of the node from the drop
-        data: { label: `${type} node`, objectNode: objectNode1 }, // Make sure objectNode1 is defined and correct
+        data: { objectNode: createNewNode(nodeName) }, // Create a new object node based on the type
       };
-  
+
       console.log("New Node:", newNode);
-  
+
       // Update the state with the new node
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nds) => nds.concat(newNode)); 
       console.log("Nodes after drop:", nodes);
     },
-    [screenToFlowPosition, type, objectNode1] // Ensure the dependencies are correct
+    [screenToFlowPosition, type] // Ensure the dependencies are correct
   );
-  
- 
+
   return (
     <div className="flex h-screen">
       {/* Left Panel (DnDFlow) */}
@@ -117,18 +167,23 @@ const DnDFlow = () => {
       
       {/* Right Panel (for BottomDragBar) */}
       <div className="w-64 bg-gray-200 p-4 h-screen">
-        <BottomDragBar />
+        <BottomDragBar nodeNames={["make red", "make green", "make blue"]}/>
       </div>
     </div>
   );
 };
- 
-const Flow = () => (
+
+// Now Flow accepts initialNodes as a prop.
+const Flow = ({ number }: { number: number }) => (
+  <div className="flow-container">
   <ReactFlowProvider>
     <DnDProvider>
-      <DnDFlow />
+      <DnDFlow initialNodes={getStartNodes(number)} />
     </DnDProvider>
   </ReactFlowProvider>
+  </div>
 );
+
+// Example usage with initialNodes:
 
 export default Flow;
