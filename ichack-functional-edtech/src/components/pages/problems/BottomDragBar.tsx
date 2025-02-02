@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import { useDnD } from "./DnDContext";
 import { FuncEnum } from "@/components/nodes/Type";
@@ -6,7 +7,7 @@ import { motion } from "framer-motion"; // For smooth animations
 
 const shapeFuncs = [FuncEnum.MAKE_RED, FuncEnum.MAKE_GREEN, FuncEnum.MAKE_BLUE];
 const natFuncs = [FuncEnum.MULTIPLY_2];
-const strFuncs = [FuncEnum.LIST_LEN];
+const strFuncs = [FuncEnum.LIST_LEN, FuncEnum.FILTER_EVEN, FuncEnum.FILTER_ODD];
 
 const NodeList = () => {
   const [_, setType] = useDnD();

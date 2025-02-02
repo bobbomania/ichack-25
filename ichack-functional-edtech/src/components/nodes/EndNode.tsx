@@ -43,6 +43,7 @@ class EndNode_In extends ObjectNode {
   updateComponent = () => {
     if (this.inputTypes.length > 0 && this.inputTypes[0][1] != null ) {
         var final_out = this.inputTypes[0][1].run()
+        console.log(final_out)
         if (final_out.length != 1) {
             alert("You misconnected the inputs!")
         } else {
