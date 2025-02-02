@@ -43,7 +43,6 @@ function createNodesFromObjects(objectNode1: DataObject, objectNode2: ObjectNode
 
 // Define a function that returns different node sets based on the input type
 function getStartNodes(num: number) {
-  console.log(num);
   num = Number(num)
   switch (num) {
     case 1:
@@ -118,39 +117,54 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
 
   const onConnect = useCallback(
     (params: Connection) => {
-      const { source, target } = params;
+      const { source, target,  sourceHandle, targetHandle } = params;
       const sourceNode = nodes.find((node) => node.id === source);
       const targetNode = nodes.find((node) => node.id === target);
 
-      if (sourceNode && targetNode) {
-        var targetTypes = sourceNode.data.objectNode.getOutputTypes();
-        var typeConnected = targetNode.data.objectNode.canConnectToInput(targetTypes);
-
-        if (typeConnected != null) {
-          targetNode.data.objectNode.connectInput(typeConnected, sourceNode.data.objectNode);
-          setEdges((eds) => addEdge(params, eds));
-        } else {
-          console.log(`${targetNode.position.x} and ${targetNode.position.y}`)
-          showError("❌ Cannot connect these nodes!", {
-            x: targetNode.position.x,
-            y: targetNode.position.y,
-          });
+      if (sourceNode && targetNode && sourceHandle && targetHandle) {
+ 
+        const sourceIndex = parseInt(sourceHandle[sourceHandle.length-1], 10)
+        const targetIndex = parseInt(targetHandle[targetHandle.length-1], 10)
+        
+        if (sourceNode.data.objectNode.getOutputTypes().length > sourceIndex && sourceIndex >= 0) {
+          var targetType = sourceNode.data.objectNode.getOutputTypes()[sourceIndex];
+          if (targetNode.data.objectNode.canConnectToInput(targetType, targetIndex)) {
+            targetNode.data.objectNode.connectInput(sourceNode.data.objectNode, targetIndex);
+            setEdges((eds) => addEdge(params, eds));
+          } else {
+            console.log(`${targetNode.position.x} and ${targetNode.position.y}`)
+            showError("❌ Cannot connect these nodes!", {
+              x: targetNode.position.x,
+              y: targetNode.position.y,
+            });
+        }
         }
       }
     },
     [nodes, setEdges]
   );
 
-  const onReconnectStart = useCallback(() => {
+  const onReconnectStart = useCallback((b:any, oldEdge: any) => {
+    const {_, target, sourceHandle, targetHandle} = oldEdge;
+    const targetNode = nodes.find((node) => node.id == target);
+
+    if (targetNode && targetHandle) {
+      const targetIndex = parseInt(targetHandle[targetHandle.length-1], 10)
+      targetNode.data.objectNode.removeInputAtIndex(targetIndex);
+    }
+
     edgeReconnectSuccessful.current = false;
   }, []);
  
   const onReconnect = useCallback((oldEdge: any, newConnection: any) => {
+    onConnect(newConnection)
+    setEdges((eds) => eds.filter((e) => e.id !== newConnection.id));
+
     edgeReconnectSuccessful.current = true;
     setEdges((els) => reconnectEdge(oldEdge, newConnection, els));
   }, []);
  
-  const onReconnectEnd = useCallback((_, edge) => {
+  const onReconnectEnd = useCallback((oldEdge: any, edge: any) => {
     if (!edgeReconnectSuccessful.current) {
       setEdges((eds) => eds.filter((e) => e.id !== edge.id));
     }
@@ -173,9 +187,7 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
         y: event.clientY,
       });
 
-      console.log("Drop Position:", position);
       const nodeName = event.dataTransfer.getData('application/reactflow');
-      console.log('Dropped Node Name:', nodeName);
 
       // Create a new node at the drop position
       const newNode = {
@@ -185,11 +197,8 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
         data: { objectNode: createNewNode(nodeName) }, // Create a new object node based on the type
       };
 
-      console.log("New Node:", newNode);
-
       // Update the state with the new node
       setNodes((nds) => nds.concat(newNode)); 
-      console.log("Nodes after drop:", nodes);
     },
     [screenToFlowPosition, type] // Ensure the dependencies are correct
   );
