@@ -16,6 +16,11 @@ const problems = [
   { id: 1, name: "Problem 1" },
   { id: 2, name: "Problem 2" },
   { id: 3, name: "Problem 3" },
+  { id: 4, name: "Problem 4" },
+  { id: 5, name: "Problem 5" },
+  { id: 6, name: "Problem 6" },
+
+
 ];
 
 export default function SideBar({toggleSidebar }: SidebarProps) {

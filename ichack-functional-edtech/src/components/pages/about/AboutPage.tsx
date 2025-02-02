@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import GraphCanvas from "../GraphCanvas";
 
 
 export default function AboutPage() {
+  
   return (
     <div className="relative flex justify-center items-center min-h-screen w-full bg-white">
       <GraphCanvas />
@@ -16,8 +18,11 @@ export default function AboutPage() {
         </p>
         <button
           className="px-6 py-3 bg-yellow-400 text-gray-800 font-semibold rounded-full shadow-lg hover:bg-yellow-500 transition duration-200 transform hover:scale-105"
-        >
+        ><Link
+            href="/problem/1">
           Start Learning
+
+            </Link>
         </button>
       </div>
     </div>

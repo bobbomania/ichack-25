@@ -4,8 +4,8 @@ import { DnDProvider, useDnD } from './DnDContext';
 import BottomDragBar from './BottomDragBar';
 import { FuncEnum, ShapeEnum } from '@/components/nodes/Type';
 import CustomNode from '@/components/nodes/CustomNode';
-import { MakeBlue, MakeGreen, MakeRed } from '@/components/nodes/functions/Colour';
-import { ShapeData, TriangleComponent } from '@/components/nodes/data/ShapeData';
+import { MakeBlue, MakeGreen, MakePolygon, MakeRed } from '@/components/nodes/functions/Colour';
+import { ShapeData } from '@/components/nodes/data/ShapeData';
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { ReactFlow, Background, Controls, useNodesState, useEdgesState, Connection, addEdge, useReactFlow, ReactFlowProvider, reconnectEdge, getConnectedEdges } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -16,7 +16,7 @@ import DataObject from '@/components/nodes/data/DataObject';
 import { ListData } from '@/components/nodes/data/ListData';
 import EndNode from '@/components/nodes/EndNode';
 import ObjectNode from '@/components/nodes/ObjectNode';
-import { FilterEven, FilterOdd, ListLen } from '@/components/nodes/functions/Lists';
+import { FilterEven, FilterOdd, ListLen, MakePolygons } from '@/components/nodes/functions/Lists';
 
 
 // Define node types
@@ -50,20 +50,69 @@ function getStartNodes(num: number) {
   let start: DataObject;
   switch (num) {
     case 1:
-      target = new ShapeData(40, 'red', ShapeEnum.TRIANGLE);
+      target = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
       start = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
       return createNodesFromObjects(start, EndNode(target));
 
+    // change the colour
     case 2:
-      target = new ShapeData(40, 'red', ShapeEnum.TRIANGLE);
       start = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      target = new ShapeData(40, 'green', ShapeEnum.TRIANGLE)
       return createNodesFromObjects(start, EndNode(target));
 
+    // make a polygon
     case 3:
-      target = new ShapeData(40, 'red', ShapeEnum.TRIANGLE);
-      start = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      start = new NatData(4);
+      target = new ShapeData(40, 'red', ShapeEnum.RECTANGLE);
       return createNodesFromObjects(start, EndNode(target));
 
+
+    // make polys
+    case 4:
+      const objectNode2_1 = new NatData(3);
+      const objectNode2_2 = new NatData(4);
+      const objectNode2_3 = new NatData(0);
+      const objectNodeList2 = [objectNode2_1, objectNode2_2, objectNode2_3]
+      start = new ListData(objectNodeList2)
+      const target_4_1 = new ShapeData(40, 'red', ShapeEnum.TRIANGLE)
+      const target_4_2 = new ShapeData(40, 'red', ShapeEnum.RECTANGLE)
+      const target_4_3 = new ShapeData(40, 'red', ShapeEnum.CIRCLE)
+      const target_4_list = [target_4_1, target_4_2, target_4_3]
+      target = new ListData(target_4_list)
+    return createNodesFromObjects(start, EndNode(target))
+
+    // get a single circle from a list of numbers
+    case 5:
+      const objectNode2_1_2 = new NatData(3);
+      const objectNode2_1_5 = new NatData(3);
+
+      const objectNode2_2_2 = new NatData(4);
+      const objectNode3_2_2 = new NatData(4);
+      const objectNode2_3_2 = new NatData(0);
+      const objectNodeList2_2 = [objectNode2_1_2 , objectNode2_2_2, objectNode2_1_5, objectNode3_2_2, objectNode2_3_2]
+      start = new ListData(objectNodeList2_2)
+      target = new ShapeData(40, 'green', ShapeEnum.CIRCLE)
+    return createNodesFromObjects(start, EndNode(target))
+
+    // sum list and divide to make poly
+    case 6:
+      const objectNode_1_2 = new NatData(3);
+      const objectNode_1_6 = new NatData(3);
+      const objectNode_1_7 = new NatData(3);
+      const objectNode_1_8 = new NatData(3);
+
+      const objectNode1_2_3 = new NatData(4);
+      const objectNode1_2_4 = new NatData(4);
+
+      const objectNode_2_2 = new NatData(4);
+      const objectNode_3_2 = new NatData(0);
+      const objectNodeList_2 = [objectNode1_2_3, objectNode1_2_4, objectNode_1_7, objectNode_1_8 , objectNode_1_6, objectNode_3_2, objectNode_1_2, objectNode_2_2]
+      start = new ListData(objectNodeList_2)
+
+      target = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE)
+      return createNodesFromObjects(start, EndNode(target))
+      
+  
     default:
       throw new Error(`no start '${num}' config that is recognised`);
       
@@ -87,6 +136,10 @@ function createNewNode(name: string) {
       return new FilterEven();
     case FuncEnum.FILTER_ODD:
       return new FilterOdd();
+    case FuncEnum.MAKE_POLY:
+      return new MakePolygon();
+    case FuncEnum.MAKE_POLYS:
+      return new MakePolygons();
     default:
       throw new Error(`NotImplementedError: The node "${name}" is not supported.`);
   }
