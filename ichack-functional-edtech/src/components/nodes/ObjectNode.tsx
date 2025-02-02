@@ -30,25 +30,16 @@ export abstract class ObjectNode {
     return this.currentComponentData;
   }
 
-  canConnectToInput(types: TypeEnum[]): TypeEnum | null {
-    for (let i = 0; i < this.inputTypes.length; i++) {
-      const currInput = this.inputTypes[i];
-      for (let j = 0; j < types.length; j++) {
-        if (currInput[1] == null && (currInput[0] === types[j] || currInput[0] === TypeEnum.ANY)) {
-          return types[j];
-        }
-      }
-    }
-    return null;
+  canConnectToInput(type: TypeEnum, index: number): boolean {
+    return index >= 0 && index < this.inputTypes.length && this.inputTypes[index][1] == null && (this.inputTypes[index][0] == TypeEnum.ANY || this.inputTypes[index][0] == type) ;
   }
 
-  connectInput(type: TypeEnum, obj: ObjectNode): void {
-    for (let i = 0; i < this.inputTypes.length; i++) {
-      if (this.inputTypes[i][0] === type || this.inputTypes[i][0] === TypeEnum.ANY) {
-        this.inputTypes[i][1] = obj;
-        return;
-      }
-    }
+  connectInput(obj: ObjectNode, index: number): void {
+    this.inputTypes[index][1] = obj;
+  }
+
+  removeInputAtIndex(index: number): void {
+    this.inputTypes[index][1] = null;
   }
 
   getInputTypes(): [TypeEnum, any][] {

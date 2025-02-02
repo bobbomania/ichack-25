@@ -13,7 +13,6 @@ const CustomNode: React.FC<NodeProps> = ({ data }) => {
 
       {/* Input Handles */}
       {objectNode.getInputTypes().map((_, i) => {
-        console.log(i)
         return (
         <Handle
           key={`input-${i}`}
