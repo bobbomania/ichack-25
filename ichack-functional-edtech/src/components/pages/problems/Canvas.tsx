@@ -28,13 +28,14 @@ function createNodesFromObjects(objectNode1: DataObject, objectNode2: ObjectNode
     {
       id: "1",
       type: "customNode",
-      position: { x: 250, y: 5 },
+      position: { x: 0, y: 0}, 
       data: { objectNode: objectNode1 },
+      draggable: false, 
     },
     {
       id: "2",
       type: "customNode",
-      position: { x: 100, y: 100 },
+      position: { x: 1150, y: 0 },
       data: { objectNode: objectNode2 },
     },
   ];
@@ -195,9 +196,9 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
   );
 
   return (
-    <div className="flex h-screen" style={{position:"relative"}}>
-        {/* 🔴 Error Popup */}
-        <AnimatePresence>
+    <div className="flex h-screen w-screen">
+      {/* 🔴 Error Popup */}
+      <AnimatePresence>
         {error && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -221,8 +222,9 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* Left Panel (DnDFlow) */}
-      <div className="flex-grow">
+  
+      {/* ReactFlow Canvas (Takes full width) */}
+      <div className="flex-grow h-full mx-auto max-w-7xl" style={{ transform: 'translateX(-175px)' }}>
         <div className="reactflow-wrapper w-full h-full" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}
@@ -237,21 +239,22 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
             onReconnectStart={onReconnectStart}
             onReconnectEnd={onReconnectEnd}
             onConnect={onConnect}
-            fitView
             style={{ backgroundColor: "#F7F9FB" }}
+            disableKeyboardA11y={true}
           >
             <Controls />
             <Background />
           </ReactFlow>
         </div>
       </div>
-      
-      {/* Right Panel (for BottomDragBar) */}
-      <div className="w-64 bg-gray-200 p-4 h-screen">
-        <BottomDragBar nodeNames={[FuncEnum.MAKE_RED, FuncEnum.MAKE_GREEN, FuncEnum.MAKE_BLUE, FuncEnum.MULTIPLY_2]}/>
+      {/* Sidebar (Right Panel) */}
+      <div className="w-72 bg-gray-200 p-4 h-screen">
+        <BottomDragBar />
       </div>
     </div>
-  )};
+  );
+}
+  
 
 // Now Flow accepts initialNodes as a prop.
 const Flow = ({ number }: { number: number }) => (
@@ -263,7 +266,5 @@ const Flow = ({ number }: { number: number }) => (
   </ReactFlowProvider>
   </div>
 );
-
-// Example usage with initialNodes:
 
 export default Flow;
