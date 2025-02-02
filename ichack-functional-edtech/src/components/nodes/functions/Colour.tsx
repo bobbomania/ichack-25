@@ -67,7 +67,7 @@ export class MakePolygon extends FunctionNode {
             case 3:
                 return new ShapeData(40, "red", ShapeEnum.TRIANGLE)
             default:
-                throw new Error("wrong sides shape not supported")
+                // throw new Error("wrong sides shape not supported")
         }    });
 
     return out;

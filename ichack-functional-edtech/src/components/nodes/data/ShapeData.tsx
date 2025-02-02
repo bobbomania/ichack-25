@@ -63,7 +63,7 @@ export class ShapeData extends DataObject {
                 comp = RectangleComponent({size, color});
                 break;
             default:
-                throw new Error(`Shape type '${shapeType}' is not implemented`);
+                // throw new Error(`Shape type '${shapeType}' is not implemented`);
             
         }
 
