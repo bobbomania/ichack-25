@@ -52,7 +52,7 @@ function getStartNodes(num: number) {
       const objectNode1_3 = new NatData(3);
       const objectNodeList1 = [objectNode1_1, objectNode1_2, objectNode1_3]
       const objectNode7 = new ListData(objectNodeList1)
-      return createNodesFromObjects(objectNode7, EndNode);
+      return createNodesFromObjects(objectNode7, EndNode());
 
     case 2:
       const objectNode2_1 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
@@ -60,12 +60,12 @@ function getStartNodes(num: number) {
       const objectNode2_3 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
       const objectNodeList2 = [objectNode2_1, objectNode2_2, objectNode2_3]
       const objectNode2_res = new ListData(objectNodeList2)
-      return createNodesFromObjects(objectNode2_res, EndNode);
+      return createNodesFromObjects(objectNode2_res, EndNode());
 
     case 3:
       const objectNode5 = new NatData(3);
       const objectNode6 = new ShapeData(10, 'blue', ShapeEnum.TRIANGLE);
-      return createNodesFromObjects(objectNode5, EndNode);
+      return createNodesFromObjects(objectNode5, EndNode());
 
     default:
       throw new Error(`no start '${num}' config that is recognised`);

@@ -18,23 +18,25 @@ class EndNode_In extends ObjectNode {
 
   render(): ReactNode {
     return (
-      <div className="relative w-[100px] h-[100px] border-2 border-gray-300 rounded-lg overflow-hidden">
-        {/* Top Banner with Play Button */}
-        <div className="absolute top-0 w-full bg-white-100 py-1 px-3 flex justify-end shadow-sm">
-          <button
-            onClick={this.updateComponent}
-            className="w-5 h-5 flex items-center justify-center bg-blue-500 text-white text-[8px] font-semibold rounded-full shadow hover:bg-blue-600 transition"
-          >
-            Go
-          </button>
+        <div className="relative flex flex-col min-w-[100px] min-h-[100px] w-fit h-fit border-2 border-gray-300 rounded-lg overflow-hidden">
+          {/* Top Banner with Play Button */}
+          <div className="flex justify-end bg-gray-100 py-1 px-3 shadow-sm">
+            <button
+              onClick={this.updateComponent}
+              className="w-5 h-5 flex items-center justify-center bg-blue-500 text-white text-[8px] font-semibold rounded-full shadow hover:bg-blue-600 transition"
+            >
+              Go
+            </button>
+          </div>
+      
+          {/* Content Area */}
+          <div className="flex flex-1 items-center justify-center p-2">
+            {this.currentComponentData}
+          </div>
         </div>
-  
-        {/* Content */}
-        <div className="absolute top-[30px] left-0 w-full h-[calc(100%-30px)] flex items-center justify-center">
-          {this.currentComponentData}
-        </div>
-      </div>
-    );
+      );
+      
+      
   }
   
 
@@ -58,6 +60,6 @@ class EndNode_In extends ObjectNode {
 
 }
 
-const EndNode = new EndNode_In(<div/>)
+const EndNode = () => { return new EndNode_In(<div/>) }
 
 export default EndNode;

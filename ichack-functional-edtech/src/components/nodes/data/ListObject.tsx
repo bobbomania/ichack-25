@@ -48,12 +48,11 @@ export class ListData extends DataObject {
 
     var comp: ReactNode = ListComponent({objects});
         
-
     // ✅ Call super() first with a temporary null component
     super(comp, outs);
   }
 
   logic(inputs: any[]): any[] {
-    return [];
+    return [this];
   }
 }
