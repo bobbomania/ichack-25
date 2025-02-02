@@ -12,6 +12,8 @@ abstract class DataObject extends ObjectNode {
     super(component, [], outputTypes);
   }
 
+  abstract equals(other: any): boolean;
+
 }
 
 export default DataObject;

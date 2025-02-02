@@ -3,6 +3,22 @@ import ObjectNode from './ObjectNode';
 import { TypeEnum } from './Type';
 import DataObject from './data/DataObject';
 
+
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
+
+const WrappedWithCheckmark = ({ children }) => (
+  <div className="flex items-center relative">
+    <CheckCircleIcon className="w-6 h-6 text-green-500 mr-2" />
+    <div className="relative">
+      {children}
+      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30"></div>
+    </div>
+  </div>
+);
+
+
+
+
 interface props {
     children: any,
     onPlay: any
@@ -10,10 +26,11 @@ interface props {
 
 
 class EndNode_In extends ObjectNode {
-
-        constructor(comp: ReactNode) {
+    target;
+        constructor(comp: ReactNode, target: DataObject) {
     // Call the super constructor first, before accessing `this`
     super(comp, [TypeEnum.ANY], []);
+    this.target = target;
   }
 
   render(): ReactNode {
@@ -47,7 +64,14 @@ class EndNode_In extends ObjectNode {
         if (final_out.length != 1) {
             alert("You misconnected the inputs!")
         } else {
-            this.updateComponentData(final_out[0].render())
+            if (this.target.equals(final_out[0])) {
+              console.log("SUCC")
+              this.updateComponentData(WrappedWithCheckmark(final_out[0].render()))
+            }
+            else {
+              this.updateComponentData(final_out[0].render());
+            }
+            
         }
     } else {
         alert("Uh oh not connected")
@@ -61,6 +85,6 @@ class EndNode_In extends ObjectNode {
 
 }
 
-const EndNode = () => { return new EndNode_In(<div/>) }
+const EndNode = (target: DataObject) => { return new EndNode_In(<div/>, target) }
 
 export default EndNode;

@@ -46,20 +46,25 @@ function createNodesFromObjects(objectNode1: DataObject, objectNode2: ObjectNode
 // Define a function that returns different node sets based on the input type
 function getStartNodes(num: number) {
   num = Number(num)
+  let target: DataObject;
+  let start: DataObject;
   switch (num) {
     case 1:
-      const objectNode1_1 = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
-      return createNodesFromObjects(objectNode1_1, EndNode());
+      target = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      start = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      return createNodesFromObjects(start, EndNode(target));
 
     // change the colour
     case 2:
-      const objectNode1_2 = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
-      return createNodesFromObjects(objectNode1_2, EndNode());
+      start = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      target = new ShapeData(40, 'green', ShapeEnum.TRIANGLE)
+      return createNodesFromObjects(start, EndNode(target));
 
     // make a polygon
     case 3:
-      const objectNode5 = new NatData(4);
-      return createNodesFromObjects(objectNode5, EndNode());
+      start = new NatData(4);
+      target = new ShapeData(40, 'red', ShapeEnum.RECTANGLE);
+      return createNodesFromObjects(start, EndNode(target));
 
 
     // make polys
@@ -68,8 +73,13 @@ function getStartNodes(num: number) {
       const objectNode2_2 = new NatData(4);
       const objectNode2_3 = new NatData(0);
       const objectNodeList2 = [objectNode2_1, objectNode2_2, objectNode2_3]
-      const objectNode2_res = new ListData(objectNodeList2)
-    return createNodesFromObjects(objectNode2_res, EndNode())
+      start = new ListData(objectNodeList2)
+      const target_4_1 = new ShapeData(40, 'red', ShapeEnum.TRIANGLE)
+      const target_4_2 = new ShapeData(40, 'red', ShapeEnum.RECTANGLE)
+      const target_4_3 = new ShapeData(40, 'red', ShapeEnum.CIRCLE)
+      const target_4_list = [target_4_1, target_4_2, target_4_3]
+      target = new ListData(target_4_list)
+    return createNodesFromObjects(start, EndNode(target))
 
     // get a single circle from a list of numbers
     case 5:
@@ -80,8 +90,9 @@ function getStartNodes(num: number) {
       const objectNode3_2_2 = new NatData(4);
       const objectNode2_3_2 = new NatData(0);
       const objectNodeList2_2 = [objectNode2_1_2 , objectNode2_2_2, objectNode2_1_5, objectNode3_2_2, objectNode2_3_2]
-      const objectNode2_res_2 = new ListData(objectNodeList2_2)
-    return createNodesFromObjects(objectNode2_res_2, EndNode())
+      start = new ListData(objectNodeList2_2)
+      target = new ShapeData(40, 'green', ShapeEnum.CIRCLE)
+    return createNodesFromObjects(start, EndNode(target))
 
     // sum list and divide to make poly
     case 6:
@@ -96,8 +107,11 @@ function getStartNodes(num: number) {
       const objectNode_2_2 = new NatData(4);
       const objectNode_3_2 = new NatData(0);
       const objectNodeList_2 = [objectNode1_2_3, objectNode1_2_4, objectNode_1_7, objectNode_1_8 , objectNode_1_6, objectNode_3_2, objectNode_1_2, objectNode_2_2]
-      const objectNode2_re_2 = new ListData(objectNodeList_2)
-      return createNodesFromObjects(objectNode2_re_2, EndNode())
+      start = new ListData(objectNodeList_2)
+
+      target = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE)
+      return createNodesFromObjects(start, EndNode(target))
+      
   
     default:
       throw new Error(`no start '${num}' config that is recognised`);

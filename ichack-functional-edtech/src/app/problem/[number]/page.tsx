@@ -20,8 +20,8 @@ function getPageData(num: number): [string, string, JSX.Element] {
   switch (num) {
     case 1:
       return [
-        "Hello... Wait, Colour?",
-        "Whoops! Looks like you’re missing a color. Can you add it to the shape?",
+        "I am just me...?",
+        "We have a shape here, by connecting the output node to the visualiser you would not have changed a thing! Give it a go.",
         TriangleComponent({ size: 40, color: 'blue' }),
       ];
     

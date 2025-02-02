@@ -27,4 +27,11 @@ export class NatData extends DataObject {
       logic(inputs: any[]): any[] {
         return [this];
       }
+
+       // ✅ Implement `.equals()` method
+      equals(other: any): boolean {
+        if (!(other instanceof NatData)) return false;
+    
+        return this.number == other.number
+      }
 }

@@ -74,4 +74,12 @@ export class ShapeData extends DataObject {
       logic(inputs: any[]): any[] {
         return [this]
       }
+
+      // ✅ Implement `.equals()` method
+      equals(other: any): boolean {
+        console.log("other shape", other)
+        if (!(other instanceof ShapeData)) return false;
+        console.log("here")
+        return this.size === other.size && this.color === other.color && this.shapeType === other.shapeType
+      }
 }

@@ -44,21 +44,34 @@ return (
 export class ListData extends DataObject {
     public size: number;
     public objects: DataObject[];
-  constructor(objects: DataObject[]) {
-    // Get output types safely to prevent errors on empty lists
-    const outs = objects.length > 0 ? objects[0].getOutputTypes() : [];
-
-    //console.log("inputs are", inputs)
-    var comp: ReactNode = ListComponent({objects});
-        
-    // ✅ Call super() first with a temporary null component
-    super(comp, [TypeEnum.LIST]);
-
-    this.size = objects.length;
-    this.objects = objects
+  
+    constructor(objects: DataObject[]) {
+      // Get output types safely to prevent errors on empty lists
+      const outs = objects.length > 0 ? objects[0].getOutputTypes() : [];
+  
+      // ✅ Call super() first with a temporary null component
+      var comp: ReactNode = ListComponent({ objects });
+      super(comp, [TypeEnum.LIST]);
+  
+      this.size = objects.length;
+      this.objects = objects;
+    }
+  
+    logic(inputs: any[]): any[] {
+      return [this];
+    }
+  
+    // ✅ Implement `.equals()` method
+    equals(other: any): boolean {
+      if (!(other instanceof ListData)) return false;
+  
+      // Compare sizes first for quick elimination
+      if (this.size !== other.size) return false;
+  
+      // Compare each object in the list using `.equals()`
+      return this.objects.every((obj, index) => 
+        obj.equals(other.objects[index])
+      );
+    }
   }
-
-  logic(inputs: any[]): any[] {
-    return [this];
-  }
-}
+  
