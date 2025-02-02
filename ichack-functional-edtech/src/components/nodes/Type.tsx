@@ -14,12 +14,14 @@ export enum ShapeEnum {
 
 
 export enum FuncEnum {
-  MAKE_RED = "make red",
-  MAKE_GREEN = "make green",
-  MAKE_BLUE = "make blue",
-  MULTIPLY_2 =  "multiply by 2",
-  LIST_LEN = "list length",
-  FILTER_EVEN = "filter out odds",
-  FILTER_ODD = "filter out evens"
+  MAKE_RED = "Make Red",
+  MAKE_GREEN = "Make Green",
+  MAKE_BLUE = "Make Blue",
+  MULTIPLY_2 =  "Double",
+  LIST_LEN = "Size",
+  FILTER_EVEN = "Get Odds",
+  FILTER_ODD = "Get Evens",
+  MAKE_POLYS = "Make Polygons",
+  MAKE_POLY = "Make Poly"
 };
 

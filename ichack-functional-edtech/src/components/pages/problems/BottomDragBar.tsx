@@ -6,8 +6,8 @@ import { ChevronDown, ChevronRight, ChevronLeft, ChevronRight as ExpandIcon } fr
 import { motion } from "framer-motion"; // For smooth animations
 
 const shapeFuncs = [FuncEnum.MAKE_RED, FuncEnum.MAKE_GREEN, FuncEnum.MAKE_BLUE];
-const natFuncs = [FuncEnum.MULTIPLY_2];
-const strFuncs = [FuncEnum.LIST_LEN, FuncEnum.FILTER_EVEN, FuncEnum.FILTER_ODD];
+const natFuncs = [FuncEnum.MULTIPLY_2, FuncEnum.MAKE_POLY];
+const listFuncs = [FuncEnum.LIST_LEN, FuncEnum.FILTER_EVEN, FuncEnum.FILTER_ODD, FuncEnum.MAKE_POLYS];
 
 const NodeList = () => {
   const [_, setType] = useDnD();
@@ -49,7 +49,7 @@ const NodeList = () => {
         {[
           { title: "Shape Functions", key: "shape", funcs: shapeFuncs },
           { title: "Number Functions", key: "nat", funcs: natFuncs },
-          { title: "String Functions", key: "str", funcs: strFuncs },
+          { title: "List Functions", key: "str", funcs: listFuncs },
         ].map(({ title, key, funcs }) => (
           <div key={key} className="w-full">
             {/* Section Header */}

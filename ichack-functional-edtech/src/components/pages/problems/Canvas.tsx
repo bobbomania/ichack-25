@@ -4,7 +4,7 @@ import { DnDProvider, useDnD } from './DnDContext';
 import BottomDragBar from './BottomDragBar';
 import { FuncEnum, ShapeEnum } from '@/components/nodes/Type';
 import CustomNode from '@/components/nodes/CustomNode';
-import { MakeBlue, MakeGreen, MakeRed } from '@/components/nodes/functions/Colour';
+import { MakeBlue, MakeGreen, MakePolygon, MakeRed } from '@/components/nodes/functions/Colour';
 import { ShapeData } from '@/components/nodes/data/ShapeData';
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { ReactFlow, Background, Controls, useNodesState, useEdgesState, Connection, addEdge, useReactFlow, ReactFlowProvider, reconnectEdge, getConnectedEdges } from "@xyflow/react";
@@ -16,7 +16,7 @@ import DataObject from '@/components/nodes/data/DataObject';
 import { ListData } from '@/components/nodes/data/ListData';
 import EndNode from '@/components/nodes/EndNode';
 import ObjectNode from '@/components/nodes/ObjectNode';
-import { FilterEven, FilterOdd, ListLen } from '@/components/nodes/functions/Lists';
+import { FilterEven, FilterOdd, ListLen, MakePolygons } from '@/components/nodes/functions/Lists';
 
 
 // Define node types
@@ -51,19 +51,54 @@ function getStartNodes(num: number) {
       const objectNode1_1 = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
       return createNodesFromObjects(objectNode1_1, EndNode());
 
+    // change the colour
     case 2:
-      const objectNode2_1 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
-      const objectNode2_2 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
-      const objectNode2_3 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
-      const objectNodeList2 = [objectNode2_1, objectNode2_2, objectNode2_3]
-      const objectNode2_res = new ListData(objectNodeList2)
-      return createNodesFromObjects(objectNode2_res, EndNode());
+      const objectNode1_2 = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      return createNodesFromObjects(objectNode1_2, EndNode());
 
+    // make a polygon
     case 3:
-      const objectNode5 = new NatData(3);
-      const objectNode6 = new ShapeData(10, 'blue', ShapeEnum.TRIANGLE);
+      const objectNode5 = new NatData(4);
       return createNodesFromObjects(objectNode5, EndNode());
 
+
+    // make polys
+    case 4:
+      const objectNode2_1 = new NatData(3);
+      const objectNode2_2 = new NatData(4);
+      const objectNode2_3 = new NatData(0);
+      const objectNodeList2 = [objectNode2_1, objectNode2_2, objectNode2_3]
+      const objectNode2_res = new ListData(objectNodeList2)
+    return createNodesFromObjects(objectNode2_res, EndNode())
+
+    // get a single circle from a list of numbers
+    case 5:
+      const objectNode2_1_2 = new NatData(3);
+      const objectNode2_1_5 = new NatData(3);
+
+      const objectNode2_2_2 = new NatData(4);
+      const objectNode3_2_2 = new NatData(4);
+      const objectNode2_3_2 = new NatData(0);
+      const objectNodeList2_2 = [objectNode2_1_2 , objectNode2_2_2, objectNode2_1_5, objectNode3_2_2, objectNode2_3_2]
+      const objectNode2_res_2 = new ListData(objectNodeList2_2)
+    return createNodesFromObjects(objectNode2_res_2, EndNode())
+
+    // sum list and divide to make poly
+    case 6:
+      const objectNode_1_2 = new NatData(3);
+      const objectNode_1_6 = new NatData(3);
+      const objectNode_1_7 = new NatData(3);
+      const objectNode_1_8 = new NatData(3);
+
+      const objectNode1_2_3 = new NatData(4);
+      const objectNode1_2_4 = new NatData(4);
+
+      const objectNode_2_2 = new NatData(4);
+      const objectNode_3_2 = new NatData(0);
+      const objectNodeList_2 = [objectNode1_2_3, objectNode1_2_4, objectNode_1_7, objectNode_1_8 , objectNode_1_6, objectNode_3_2, objectNode_1_2, objectNode_2_2]
+      const objectNode2_re_2 = new ListData(objectNodeList_2)
+      return createNodesFromObjects(objectNode2_re_2, EndNode())
+  
     default:
       throw new Error(`no start '${num}' config that is recognised`);
       
@@ -87,6 +122,10 @@ function createNewNode(name: string) {
       return new FilterEven();
     case FuncEnum.FILTER_ODD:
       return new FilterOdd();
+    case FuncEnum.MAKE_POLY:
+      return new MakePolygon();
+    case FuncEnum.MAKE_POLYS:
+      return new MakePolygons();
     default:
       throw new Error(`NotImplementedError: The node "${name}" is not supported.`);
   }

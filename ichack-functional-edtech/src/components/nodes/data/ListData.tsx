@@ -7,7 +7,7 @@ interface ListProps {
     objects: DataObject[]; // size in pixel    
      }    
       
-const ListComponent = ({ objects }: ListProps) => {
+export const ListComponent = ({ objects }: ListProps) => {
 return (
     <div
     style={{

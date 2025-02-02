@@ -2,7 +2,8 @@
 import DataObject from "../data/DataObject";
 import { ListData } from "../data/ListData";
 import { NatData } from "../data/NatData";
-import { FuncEnum, TypeEnum } from "../Type";
+import { ShapeData } from "../data/ShapeData";
+import { FuncEnum, ShapeEnum, TypeEnum } from "../Type";
 import FunctionNode from "./Function";
 
 export class ListLen extends FunctionNode {  
@@ -69,6 +70,37 @@ export class FilterOdd extends FunctionNode {
             // If there are any valid objects after filtering, return them as new NatData instances
             const new_objs = filteredObjects.map((obj: any) => new NatData(obj.number));
             return new ListData(new_objs)
+        }).flat(); // Flatten the result to get a single array of NatData instances
+
+        return out;
+}
+}
+
+
+export class MakePolygons extends FunctionNode {  
+    constructor() {
+        super(FuncEnum.MAKE_POLY, [TypeEnum.LIST], [TypeEnum.SHAPE]);
+    }
+
+    // Logic method that changes the color of shape objects
+    logic(inputs: ListData[][]): DataObject[] {
+        var out: DataObject[] = inputs.map((elem: ListData[]) => {
+            // Assume elem[0].objects is an array of objects we want to filter
+            return new ListData( elem[0].objects.map((obj: any) => {
+                // Cast each object to NatData
+                const number = obj as unknown as NatData;
+                switch (number.number) {
+                    case 0:
+                        return new ShapeData(40, "red", ShapeEnum.CIRCLE)
+                    case 4:
+                        return new ShapeData(40, "red", ShapeEnum.RECTANGLE)
+                    case 3:
+                        return new ShapeData(40, "red", ShapeEnum.TRIANGLE)
+                    default:
+                        throw new Error("wrong sides shape not supported")
+                }
+            }));
+
         }).flat(); // Flatten the result to get a single array of NatData instances
 
         return out;
