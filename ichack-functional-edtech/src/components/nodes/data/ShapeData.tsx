@@ -35,7 +35,7 @@ const CircleComponent = ({ size, color }: ShapeProps) => {
       width: `${size * 1.5}px`,
       height: `${size}px`,
       backgroundColor: color,
-      borderRadius: "10px", // Slightly rounded corners for a smooth look
+      borderRadius: "0", // Slightly rounded corners for a smooth look
     };
   
     return <div style={rectangleStyle} />;

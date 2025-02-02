@@ -18,22 +18,25 @@ class EndNode_In extends ObjectNode {
 
   render(): ReactNode {
     return (
-        <div className="relative w-[400px] h-[400px] border-2 border-gray-300 rounded-lg overflow-hidden flex items-center justify-center">
+      <div className="relative w-[100px] h-[100px] border-2 border-gray-300 rounded-lg overflow-hidden">
         {/* Top Banner with Play Button */}
         <div className="absolute top-0 w-full bg-white-100 py-1 px-3 flex justify-end shadow-sm">
-            <button
+          <button
             onClick={this.updateComponent}
-            className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white text-xs font-semibold rounded-full shadow hover:bg-blue-600 transition"
-            >
+            className="w-5 h-5 flex items-center justify-center bg-blue-500 text-white text-[8px] font-semibold rounded-full shadow hover:bg-blue-600 transition"
+          >
             Go
-            </button>
+          </button>
         </div>
-    
+  
         {/* Content */}
-        <div className="w-full h-full flex">{this.currentComponentData}</div>
+        <div className="absolute top-[30px] left-0 w-full h-[calc(100%-30px)] flex items-center justify-center">
+          {this.currentComponentData}
         </div>
+      </div>
     );
   }
+  
 
   updateComponent = () => {
     if (this.inputTypes.length > 0 && this.inputTypes[0][1] != null ) {
