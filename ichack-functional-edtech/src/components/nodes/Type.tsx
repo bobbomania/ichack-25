@@ -1,6 +1,6 @@
 export enum TypeEnum {
   STRING =  "STRING",
-  NUMBER = "NUMBER",
+  NAT = "NUMBER",
   SHAPE = "SHAPE",
 };
 
@@ -15,5 +15,6 @@ export enum FuncEnum {
   MAKE_RED = "make red",
   MAKE_GREEN = "make green",
   MAKE_BLUE = "make blue",
+  MULTIPLY_2 =  "multiply by 2"
 };
 

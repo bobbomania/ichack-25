@@ -10,6 +10,10 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import { ReactFlow, Background, Controls, useNodesState, useEdgesState, Connection, addEdge, useReactFlow, ReactFlowProvider } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { AnimatePresence, motion } from 'framer-motion';
+import { MultiplyByTwo } from '@/components/nodes/functions/Nats';
+import { NatData } from '@/components/nodes/data/NatData';
+import DataObject from '@/components/nodes/data/DataObject';
+import { ListData } from '@/components/nodes/data/ListObject';
 
 
 // Define node types
@@ -17,7 +21,7 @@ const nodeTypes = {
   customNode: CustomNode,
 };
 
-function createNodesFromObjects(objectNode1: ShapeData, objectNode2: ShapeData): any[] {
+function createNodesFromObjects(objectNode1: DataObject, objectNode2: DataObject): any[] {
   return [
     {
       id: "1",
@@ -41,15 +45,20 @@ function getStartNodes(num: number) {
   num = Number(num)
   switch (num) {
     case 1:
-      const objectNode1 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
-      const objectNode2 = new ShapeData(10, 'green', ShapeEnum.TRIANGLE);
-      console.log("here")
-      return createNodesFromObjects(objectNode1, objectNode2);
+      const objectNode1_1 = new NatData(1);
+      const objectNode1_2 = new NatData(2);
+      const objectNode1_3 = new NatData(3);
+      const objectNodeList1 = [objectNode1_1, objectNode1_2, objectNode1_3]
+      const objectNode7 = new ListData(objectNodeList1)
+      return createNodesFromObjects(objectNode7, objectNode7);
 
     case 2:
-      const objectNode3 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
-      const objectNode4 = new ShapeData(10, 'blue', ShapeEnum.TRIANGLE);
-      return createNodesFromObjects(objectNode3, objectNode4);
+      const objectNode2_1 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
+      const objectNode2_2 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
+      const objectNode2_3 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
+      const objectNodeList2 = [objectNode2_1, objectNode2_2, objectNode2_3]
+      const objectNode2_res = new ListData(objectNodeList2)
+      return createNodesFromObjects(objectNode2_res, objectNode2_res);
 
     case 3:
       const objectNode5 = new ShapeData(10, 'green', ShapeEnum.RECTANGLE);
@@ -71,6 +80,8 @@ function createNewNode(name: string) {
       return new MakeGreen();
     case FuncEnum.MAKE_BLUE:
       return new MakeBlue();
+    case FuncEnum.MULTIPLY_2:
+      return new MultiplyByTwo();
     default:
       throw new Error(`NotImplementedError: The node "${name}" is not supported.`);
   }
@@ -213,7 +224,7 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
       
       {/* Right Panel (for BottomDragBar) */}
       <div className="w-64 bg-gray-200 p-4 h-screen">
-        <BottomDragBar nodeNames={["make red", "make green", "make blue"]}/>
+        <BottomDragBar nodeNames={[FuncEnum.MAKE_RED, FuncEnum.MAKE_GREEN, FuncEnum.MAKE_BLUE, FuncEnum.MULTIPLY_2]}/>
       </div>
     </div>
   )};
