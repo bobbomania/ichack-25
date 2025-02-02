@@ -97,6 +97,7 @@ interface DnDFlowProps {
 
 const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
   const reactFlowWrapper = useRef(null);
+  const edgeReconnectSuccessful = useRef(true);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { screenToFlowPosition } = useReactFlow();
@@ -137,6 +138,23 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
     },
     [nodes, setEdges]
   );
+
+  const onReconnectStart = useCallback(() => {
+    edgeReconnectSuccessful.current = false;
+  }, []);
+ 
+  const onReconnect = useCallback((oldEdge, newConnection) => {
+    edgeReconnectSuccessful.current = true;
+    setEdges((els) => reconnectEdge(oldEdge, newConnection, els));
+  }, []);
+ 
+  const onReconnectEnd = useCallback((_, edge) => {
+    if (!edgeReconnectSuccessful.current) {
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    }
+ 
+    edgeReconnectSuccessful.current = true;
+  }, []);
 
   const onDragOver = useCallback((event: any) => {
     event.preventDefault();
@@ -210,9 +228,13 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
             nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
             onDrop={onDrop}
             onDragOver={onDragOver}
+            snapToGrid
+            onReconnect={onReconnect}
+            onReconnectStart={onReconnectStart}
+            onReconnectEnd={onReconnectEnd}
+            onConnect={onConnect}
             fitView
             style={{ backgroundColor: "#F7F9FB" }}
           >
