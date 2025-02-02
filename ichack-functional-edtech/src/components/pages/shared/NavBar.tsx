@@ -23,25 +23,16 @@ export default function NavBar() {
           ☰
         </button>
 
-        {/* Link to Home page, centered */}
-        <div className="flex-grow text-center">
+        {/* Fun Learning - Link to Home page, now aligned to the right */}
+        <div className="text-lg font-bold text-white">
           <Link
             href="/"
-            className="text-white text-lg hover:text-gray-200 transition duration-300"
+            className="hover:text-gray-200 transition duration-300"
           >
-            Home
+            Fun Learning
           </Link>
         </div>
-
-        {/* Logo or Title on the far right */}
-        <div className="text-2xl font-semibold ml-4">
-          Fun Learning
-        </div>
       </nav>
-
-      <div className="mt-16">
-        {/* Content below navbar */}
-      </div>
 
       {/* Conditionally render Sidebar */}
       {isSidebarOpen && (

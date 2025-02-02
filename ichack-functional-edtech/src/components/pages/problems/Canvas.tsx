@@ -16,7 +16,7 @@ import DataObject from '@/components/nodes/data/DataObject';
 import { ListData } from '@/components/nodes/data/ListData';
 import EndNode from '@/components/nodes/EndNode';
 import ObjectNode from '@/components/nodes/ObjectNode';
-import { FilterEven, FilterOdd, ListLen, MakePolygons } from '@/components/nodes/functions/Lists';
+import { FilterCircle, FilterEven, FilterOdd, ListLen, MakePolygons } from '@/components/nodes/functions/Lists';
 
 
 // Define node types
@@ -126,6 +126,8 @@ function createNewNode(name: string) {
       return new MakePolygon();
     case FuncEnum.MAKE_POLYS:
       return new MakePolygons();
+    case FuncEnum.FILTER_CIRCLE:
+      return new FilterCircle();
     default:
       throw new Error(`NotImplementedError: The node "${name}" is not supported.`);
   }

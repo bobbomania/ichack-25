@@ -19,9 +19,11 @@ export enum FuncEnum {
   MAKE_BLUE = "Make Blue",
   MULTIPLY_2 =  "Double",
   LIST_LEN = "Size",
-  FILTER_EVEN = "Get Odds",
-  FILTER_ODD = "Get Evens",
+  FILTER_EVEN = "Get Evens",
+  FILTER_CIRCLE = "Get Circles",
+  FILTER_ODD = "Get Odds",
   MAKE_POLYS = "Make Polygons",
-  MAKE_POLY = "Make Poly"
+  MAKE_POLY = "Make Polygon",
+
 };
 
