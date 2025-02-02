@@ -81,18 +81,18 @@ const ProblemPage: FC<ProblemPageProps> = ({ params }) => {
 
   if (!unwrappedParams) return <div>Loading...</div>; // Loading state if `params` is not yet available
 
-  const { number } = unwrappedParams; // Extract the dynamic 'number' from the URL  var [title, description, comp] = getPageData(number);
+  const { number } = unwrappedParams; // Extract the dynamic 'number' from the URL
   var [title, description, comp] = getPageData(number);
 
   return (
     <Layout>
       <GraphCanvas />
 
-      <div className="min-h-screen w-full bg-gray-50 flex flex-row justify-center py-12 px-6">
+      <div className="w-full bg-gray-50 flex flex-row justify-center py-12 px-6 h-screen overflow-hidden">
         {/* Main Content Section */}
-        <main className="flex-1 max-w-6xl bg-white rounded-lg shadow-lg p-8 space-y-8 mx-6 h-full">
+        <main className="flex-1 max-w-6xl bg-white rounded-lg shadow-lg p-8 space-y-8 mx-6 h-full overflow-y-auto overflow-x-hidden">
           {/* Banner Section */}
-          <div className="bg-gray-100 rounded-lg p-6 shadow-md opacity-100"> {/* Set opacity to 100 */}
+          <div className="bg-gray-100 rounded-lg p-6 shadow-md opacity-100">
             <Banner title={title} description={description} smallBoxComponent={comp} />
           </div>
 
@@ -110,6 +110,7 @@ const ProblemPage: FC<ProblemPageProps> = ({ params }) => {
     </Layout>
   );
 };
+
 
 
 export default ProblemPage;
