@@ -16,6 +16,7 @@ import DataObject from '@/components/nodes/data/DataObject';
 import { ListData } from '@/components/nodes/data/ListObject';
 import EndNode from '@/components/nodes/EndNode';
 import ObjectNode from '@/components/nodes/ObjectNode';
+import { ListLen } from '@/components/nodes/functions/Lists';
 
 
 // Define node types
@@ -84,6 +85,8 @@ function createNewNode(name: string) {
       return new MakeBlue();
     case FuncEnum.MULTIPLY_2:
       return new MultiplyByTwo();
+    case FuncEnum.LIST_LEN:
+      return new ListLen();
     default:
       throw new Error(`NotImplementedError: The node "${name}" is not supported.`);
   }

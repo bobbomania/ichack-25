@@ -6,7 +6,7 @@ import { motion } from "framer-motion"; // For smooth animations
 
 const shapeFuncs = [FuncEnum.MAKE_RED, FuncEnum.MAKE_GREEN, FuncEnum.MAKE_BLUE];
 const natFuncs = [FuncEnum.MULTIPLY_2];
-const strFuncs = [];
+const strFuncs = [FuncEnum.LIST_LEN];
 
 const NodeList = () => {
   const [_, setType] = useDnD();
