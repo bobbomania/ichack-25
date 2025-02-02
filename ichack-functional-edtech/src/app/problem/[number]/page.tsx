@@ -19,7 +19,7 @@ function getPageData(num: number): [string, string, JSX.Element] {
       return [
         "Hello... Wait.. Colour?",
         "Hi there! Change the triangle from blue to red to get through to the next level!",
-        TriangleComponent({ size: 40, color: 'green' }),
+        TriangleComponent({ size: 40, color: 'red' }),
       ];
 
     case 2:

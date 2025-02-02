@@ -5,7 +5,7 @@ import BottomDragBar from './BottomDragBar';
 import { FuncEnum, ShapeEnum } from '@/components/nodes/Type';
 import CustomNode from '@/components/nodes/CustomNode';
 import { MakeBlue, MakeGreen, MakeRed } from '@/components/nodes/functions/Colour';
-import { ShapeData } from '@/components/nodes/data/ShapeData';
+import { ShapeData, TriangleComponent } from '@/components/nodes/data/ShapeData';
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { ReactFlow, Background, Controls, useNodesState, useEdgesState, Connection, addEdge, useReactFlow, ReactFlowProvider, reconnectEdge, getConnectedEdges } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -46,23 +46,23 @@ function createNodesFromObjects(objectNode1: DataObject, objectNode2: ObjectNode
 // Define a function that returns different node sets based on the input type
 function getStartNodes(num: number) {
   num = Number(num)
+  let target: DataObject;
+  let start: DataObject;
   switch (num) {
     case 1:
-      const objectNode1_1 = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
-      return createNodesFromObjects(objectNode1_1, EndNode());
+      target = new ShapeData(40, 'red', ShapeEnum.TRIANGLE);
+      start = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      return createNodesFromObjects(start, EndNode(target));
 
     case 2:
-      const objectNode2_1 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
-      const objectNode2_2 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
-      const objectNode2_3 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
-      const objectNodeList2 = [objectNode2_1, objectNode2_2, objectNode2_3]
-      const objectNode2_res = new ListData(objectNodeList2)
-      return createNodesFromObjects(objectNode2_res, EndNode());
+      target = new ShapeData(40, 'red', ShapeEnum.TRIANGLE);
+      start = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      return createNodesFromObjects(start, EndNode(target));
 
     case 3:
-      const objectNode5 = new NatData(3);
-      const objectNode6 = new ShapeData(10, 'blue', ShapeEnum.TRIANGLE);
-      return createNodesFromObjects(objectNode5, EndNode());
+      target = new ShapeData(40, 'red', ShapeEnum.TRIANGLE);
+      start = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      return createNodesFromObjects(start, EndNode(target));
 
     default:
       throw new Error(`no start '${num}' config that is recognised`);
