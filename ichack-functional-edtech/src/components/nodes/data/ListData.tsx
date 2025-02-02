@@ -42,14 +42,20 @@ return (
       
 
 export class ListData extends DataObject {
+    public size: number;
+    public objects: DataObject[];
   constructor(objects: DataObject[]) {
     // Get output types safely to prevent errors on empty lists
     const outs = objects.length > 0 ? objects[0].getOutputTypes() : [];
 
+    //console.log("inputs are", inputs)
     var comp: ReactNode = ListComponent({objects});
         
     // ✅ Call super() first with a temporary null component
-    super(comp, outs);
+    super(comp, [TypeEnum.LIST]);
+
+    this.size = objects.length;
+    this.objects = objects
   }
 
   logic(inputs: any[]): any[] {

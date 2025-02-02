@@ -13,9 +13,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { MultiplyByTwo } from '@/components/nodes/functions/Nats';
 import { NatData } from '@/components/nodes/data/NatData';
 import DataObject from '@/components/nodes/data/DataObject';
-import { ListData } from '@/components/nodes/data/ListObject';
+import { ListData } from '@/components/nodes/data/ListData';
 import EndNode from '@/components/nodes/EndNode';
 import ObjectNode from '@/components/nodes/ObjectNode';
+import { FilterEven, FilterOdd, ListLen } from '@/components/nodes/functions/Lists';
 
 
 // Define node types
@@ -80,6 +81,12 @@ function createNewNode(name: string) {
       return new MakeBlue();
     case FuncEnum.MULTIPLY_2:
       return new MultiplyByTwo();
+    case FuncEnum.LIST_LEN:
+      return new ListLen();
+    case FuncEnum.FILTER_EVEN:
+      return new FilterEven();
+    case FuncEnum.FILTER_ODD:
+      return new FilterOdd();
     default:
       throw new Error(`NotImplementedError: The node "${name}" is not supported.`);
   }
