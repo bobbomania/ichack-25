@@ -7,8 +7,6 @@ interface NatProps {
     number: number; // size in pixels
       }
   
- 
-      
 const NatComponent = ({ number }: NatProps) => {
   return <div>{number}</div>;
 };
@@ -16,7 +14,7 @@ const NatComponent = ({ number }: NatProps) => {
   
 export class NatData extends DataObject {
       constructor(
-        protected number:  number,
+        public number:  number,
       ) {
         
         var comp: ReactNode = NatComponent({number});
@@ -27,6 +25,6 @@ export class NatData extends DataObject {
       }
 
       logic(inputs: any[]): any[] {
-        return [{'number': this.number}];
+        return [this];
       }
 }

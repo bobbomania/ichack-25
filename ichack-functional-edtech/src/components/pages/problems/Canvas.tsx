@@ -62,7 +62,7 @@ function getStartNodes(num: number) {
       return createNodesFromObjects(objectNode2_res, EndNode);
 
     case 3:
-      const objectNode5 = new ShapeData(40, 'green', ShapeEnum.RECTANGLE);
+      const objectNode5 = new NatData(3);
       const objectNode6 = new ShapeData(10, 'blue', ShapeEnum.TRIANGLE);
       return createNodesFromObjects(objectNode5, EndNode);
 
@@ -205,31 +205,33 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
 
   return (
     <div className="flex h-screen" style={{position:"relative"}}>
-        {/* 🔴 Error Popup */}
-        <AnimatePresence>
-        {error && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            style={{
-              position: "absolute",
-              left: error.position.x,
-              top: error.position.y,
-              backgroundColor: "rgba(255, 0, 0, 0.8)",
-              color: "white",
-              padding: "8px 12px",
-              borderRadius: "6px",
-              fontSize: "14px",
-              fontWeight: "bold",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            {error.message}
-          </motion.div>
-        )}
-      </AnimatePresence>
+<AnimatePresence>
+  {error && (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+      style={{
+        position: "absolute",
+        left: error.position.x,
+        top: error.position.y,
+        backgroundColor: "rgba(255, 0, 0, 0.8)",
+        color: "white",
+        padding: "8px 12px",
+        borderRadius: "6px",
+        fontSize: "14px",
+        fontWeight: "bold",
+        backdropFilter: "blur(8px)",
+        pointerEvents: "none", // Prevent interference with clicks
+        zIndex: 1000, // Ensure the popup appears above other elements
+      }}
+    >
+      {error.message}
+    </motion.div>
+  )}
+</AnimatePresence>
+
       {/* Left Panel (DnDFlow) */}
       <div className="flex-grow">
         <div className="reactflow-wrapper w-full h-full" ref={reactFlowWrapper}>
