@@ -11,10 +11,10 @@ export default function AboutPage() {
       <GraphCanvas />
       <div className="relative bg-white shadow-2xl rounded-2xl p-10 text-center space-y-6 w-full max-w-4xl"> 
         <h1 className="text-5xl font-bold text-gray-900 tracking-wide transform transition-transform duration-300 hover:scale-105">
-          Welcome to Fun, Functional Learning!
+          Welcome to FunProg!
         </h1>
         <p className="text-xl text-gray-700 opacity-80">
-          Embrace the excitement of learning through engaging challenges, smooth interactions, and modern design. Let’s dive into fun and discover new things together!
+          Embrace the excitement of Monads, Random Access Lists and... Maps! Learn all about functional programming from the basics, so let’s dive into fun and discover new things together!
         </p>
         <button
           className="px-6 py-3 bg-yellow-400 text-gray-800 font-semibold rounded-full shadow-lg hover:bg-yellow-500 transition duration-200 transform hover:scale-105"

@@ -62,7 +62,7 @@ function getPageData(num: number): [string, string, JSX.Element] {
     case 6:
       return [
         "Sum and Divide for a Polygon",
-        "Here’s a challenge: Sum the numbers, divide, and see what shape pops up. What do you think it’ll be?",
+        "Here’s a challenge: how do you think we can solve this?",
         TriangleComponent({ size: 40, color: 'blue' }),
       ];
     

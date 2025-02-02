@@ -10,13 +10,13 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import { ReactFlow, Background, Controls, useNodesState, useEdgesState, Connection, addEdge, useReactFlow, ReactFlowProvider, reconnectEdge, getConnectedEdges } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { AnimatePresence, motion } from 'framer-motion';
-import { MultiplyByTwo } from '@/components/nodes/functions/Nats';
+import { DivideByTwo } from '@/components/nodes/functions/Nats';
 import { NatData } from '@/components/nodes/data/NatData';
 import DataObject from '@/components/nodes/data/DataObject';
 import { ListData } from '@/components/nodes/data/ListData';
 import EndNode from '@/components/nodes/EndNode';
 import ObjectNode from '@/components/nodes/ObjectNode';
-import { FilterCircle, FilterEven, FilterOdd, ListLen, MakePolygons } from '@/components/nodes/functions/Lists';
+import { FilterCircle, FilterEven, FilterOdd, ListLen, MakeAllGreen, MakePolygons, SumList } from '@/components/nodes/functions/Lists';
 
 
 // Define node types
@@ -91,7 +91,7 @@ function getStartNodes(num: number) {
       const objectNode2_3_2 = new NatData(0);
       const objectNodeList2_2 = [objectNode2_1_2 , objectNode2_2_2, objectNode2_1_5, objectNode3_2_2, objectNode2_3_2]
       start = new ListData(objectNodeList2_2)
-      target = new ShapeData(40, 'green', ShapeEnum.CIRCLE)
+      target = new ListData([new ShapeData(40, 'green', ShapeEnum.CIRCLE)])
     return createNodesFromObjects(start, EndNode(target))
 
     // sum list and divide to make poly
@@ -128,8 +128,8 @@ function createNewNode(name: string) {
       return new MakeGreen();
     case FuncEnum.MAKE_BLUE:
       return new MakeBlue();
-    case FuncEnum.MULTIPLY_2:
-      return new MultiplyByTwo();
+    case FuncEnum.DIVIDE_2:
+      return new DivideByTwo();
     case FuncEnum.LIST_LEN:
       return new ListLen();
     case FuncEnum.FILTER_EVEN:
@@ -142,6 +142,10 @@ function createNewNode(name: string) {
       return new MakePolygons();
     case FuncEnum.FILTER_CIRCLE:
       return new FilterCircle();
+    case FuncEnum.MAKE_ALL_GREEN:
+      return new MakeAllGreen();
+    case FuncEnum.SUM_LIST:
+      return new SumList();
     default:
       throw new Error(`NotImplementedError: The node "${name}" is not supported.`);
   }

@@ -29,7 +29,7 @@ export default function NavBar() {
             href="/"
             className="hover:text-gray-200 transition duration-300"
           >
-            Fun Learning
+            Fun Prog
           </Link>
         </div>
       </nav>

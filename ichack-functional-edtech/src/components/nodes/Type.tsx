@@ -17,13 +17,14 @@ export enum FuncEnum {
   MAKE_RED = "Make Red",
   MAKE_GREEN = "Make Green",
   MAKE_BLUE = "Make Blue",
-  MULTIPLY_2 =  "Double",
+  DIVIDE_2 =  "Halve",
   LIST_LEN = "Size",
   FILTER_EVEN = "Get Evens",
   FILTER_CIRCLE = "Get Circles",
   FILTER_ODD = "Get Odds",
   MAKE_POLYS = "Make Polygons",
   MAKE_POLY = "Make Polygon",
-
+  MAKE_ALL_GREEN = "Paint all Green",
+  SUM_LIST = "Sum Up"
 };
 
