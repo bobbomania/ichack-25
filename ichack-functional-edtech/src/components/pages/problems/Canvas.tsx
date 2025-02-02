@@ -1,30 +1,21 @@
 "use client";
 
-import React, { useRef, useCallback } from 'react';
-import {
-  ReactFlow,
-  ReactFlowProvider,
-  addEdge,
-  useNodesState,
-  useEdgesState,
-  Controls,
-  useReactFlow,
-  Background,
-} from '@xyflow/react';
-
-import '@xyflow/react/dist/style.css';
 import { DnDProvider, useDnD } from './DnDContext';
 import BottomDragBar from './BottomDragBar';
 import { FuncEnum, ShapeEnum } from '@/components/nodes/Type';
 import CustomNode from '@/components/nodes/CustomNode';
 import { MakeBlue, MakeGreen, MakeRed } from '@/components/nodes/functions/Colour';
 import { ShapeData } from '@/components/nodes/data/ShapeData';
+import React, { useCallback, useState, useEffect, useRef } from "react";
+import { ReactFlow, Background, Controls, useNodesState, useEdgesState, Connection, addEdge, useReactFlow, ReactFlowProvider } from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import { AnimatePresence, motion } from 'framer-motion';
+
 
 // Define node types
 const nodeTypes = {
   customNode: CustomNode,
 };
-
 
 function createNodesFromObjects(objectNode1: ShapeData, objectNode2: ShapeData): any[] {
   return [
@@ -100,10 +91,40 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();
 
+  const [error, setError] = useState<{ message: string; position: { x: number; y: number } } | null>(null);
+
+  const showError = (message: string, position: { x: number; y: number }) => {
+    setError({ message, position });
+
+    // Hide error after 1 second with fade-out and upward motion effect
+    setTimeout(() => {
+      setError(null);
+    }, 1000);
+  };
+
   const onConnect = useCallback(
-    // @ts-ignore
-    (params: any) => setEdges((eds: any) => addEdge(params, eds)),
-    [],
+    (params: Connection) => {
+      const { source, target } = params;
+      const sourceNode = nodes.find((node) => node.id === source);
+      const targetNode = nodes.find((node) => node.id === target);
+
+      if (sourceNode && targetNode) {
+        var targetTypes = sourceNode.data.objectNode.getOutputTypes();
+        var typeConnected = targetNode.data.objectNode.canConnectToInput(targetTypes);
+
+        if (typeConnected != null) {
+          targetNode.data.objectNode.connectInput(typeConnected, sourceNode.data.objectNode);
+          setEdges((eds) => addEdge(params, eds));
+        } else {
+          console.log(`${targetNode.position.x} and ${targetNode.position.y}`)
+          showError("❌ Cannot connect these nodes!", {
+            x: targetNode.position.x,
+            y: targetNode.position.y,
+          });
+        }
+      }
+    },
+    [nodes, setEdges]
   );
 
   const onDragOver = useCallback((event: any) => {
@@ -143,7 +164,32 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
   );
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen" style={{position:"relative"}}>
+        {/* 🔴 Error Popup */}
+        <AnimatePresence>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            style={{
+              position: "absolute",
+              left: error.position.x,
+              top: error.position.y,
+              backgroundColor: "rgba(255, 0, 0, 0.8)",
+              color: "white",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              fontSize: "14px",
+              fontWeight: "bold",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            {error.message}
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Left Panel (DnDFlow) */}
       <div className="flex-grow">
         <div className="reactflow-wrapper w-full h-full" ref={reactFlowWrapper}>
@@ -170,8 +216,7 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
         <BottomDragBar nodeNames={["make red", "make green", "make blue"]}/>
       </div>
     </div>
-  );
-};
+  )};
 
 // Now Flow accepts initialNodes as a prop.
 const Flow = ({ number }: { number: number }) => (

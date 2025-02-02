@@ -3,7 +3,7 @@ import FunctionNode from "./Function";
 
 export class MakeRed extends FunctionNode {  
     constructor() {
-      super(FuncEnum.MAKE_RED, [TypeEnum.SHAPE], [TypeEnum.SHAPE]);
+      super(FuncEnum.MAKE_RED, [TypeEnum.NUMBER], [TypeEnum.SHAPE]);
     }
   
     // Logic method that changes the color of shape objects

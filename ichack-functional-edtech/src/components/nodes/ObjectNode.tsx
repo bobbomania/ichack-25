@@ -25,15 +25,26 @@ export abstract class ObjectNode {
   }
 
   // Example method to set an input link
-  canConnectInput(type: TypeEnum, value: any, pos: number): boolean {
-    const input = this.inputTypes[pos];
-    return input[0] == type;
+  canConnectToInput(types: TypeEnum[]): TypeEnum | null {
+    for (var i=0; i < this.inputTypes.length; i++) {
+      var currInput = this.inputTypes[i];
+      for (var j=0; j < types.length; j++) {
+        if (currInput[1] == null && currInput[0] == types[j]) {
+          return types[j];
+        }
+      }
+    }
+
+    return null;
   }
 
-  // Example method to set an input link
-  canConnectOutput(type: TypeEnum, value: any, pos: number): boolean {
-    const output = this.outputTypes[pos];
-    return output[0] == type;
+  connectInput(type: TypeEnum, obj: ObjectNode): void {
+    for (var i=0; i < this.inputTypes.length; i++) {
+      if (this.inputTypes[i][0] == type) {
+        this.inputTypes[i][1] = obj;
+        return;
+      }
+    }
   }
 
   // Get all input links
