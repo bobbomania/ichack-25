@@ -8,7 +8,7 @@ interface ShapeProps {
     color: string; // color as a string (e.g., "red", "blue", "#ff0000")
       }
   
-const CircleComponent = ({ size, color }: ShapeProps) => {
+export const CircleComponent = ({ size, color }: ShapeProps) => {
     const circleStyle = {
       width: `${size}px`,
       height: `${size}px`,
@@ -19,7 +19,7 @@ const CircleComponent = ({ size, color }: ShapeProps) => {
     return <div style={circleStyle} />;
   };
 
-  const TriangleComponent = ({ size, color }: ShapeProps) => {
+  export const TriangleComponent = ({ size, color }: ShapeProps) => {
     const triangleStyle = {
       width: "0px",
       height: "0px",
@@ -30,7 +30,7 @@ const CircleComponent = ({ size, color }: ShapeProps) => {
   
     return <div style={triangleStyle} />;
   };
-  const RectangleComponent = ({ size, color }: ShapeProps) => {
+  export const RectangleComponent = ({ size, color }: ShapeProps) => {
     const rectangleStyle = {
       width: `${size * 1.5}px`,
       height: `${size}px`,

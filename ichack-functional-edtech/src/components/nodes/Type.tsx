@@ -13,9 +13,9 @@ export enum ShapeEnum {
 
 
 export enum FuncEnum {
-  MAKE_RED = "make red",
-  MAKE_GREEN = "make green",
-  MAKE_BLUE = "make blue",
-  MULTIPLY_2 =  "multiply by 2"
+  MAKE_RED = "Paint Red",
+  MAKE_GREEN = "Paint Green",
+  MAKE_BLUE = "Paint Blue",
+  MULTIPLY_2 =  "Double"
 };
 

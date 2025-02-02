@@ -1,9 +1,11 @@
-import { ShapeData } from '@/components/nodes/data/ShapeData';
+import { ShapeData, TriangleComponent } from '@/components/nodes/data/ShapeData';
 import { ShapeEnum } from '@/components/nodes/Type';
+import GraphCanvas from '@/components/pages/GraphCanvas';
 import Banner from '@/components/pages/problems/Banner';
+import BottomDragBar from '@/components/pages/problems/BottomDragBar';
 import Flow from '@/components/pages/problems/Canvas';
 import Layout from '@/components/pages/shared/Layout';
-import { FC } from "react";
+import { FC, JSX } from "react";
 
 interface ProblemPageProps {
   params: { number: number }; // Define the shape of the params object
@@ -15,11 +17,9 @@ function getPageData(num: number): [string, string, JSX.Element] {
   switch (num) {
     case 1:
       return [
-        "Natural Numbers List",
-        "A sequence of natural numbers starting from 1.",
-        <div className="p-4 border rounded bg-gray-50">
-          {JSON.stringify([1, 2, 3])}
-        </div>,
+        "Hello... Wait.. Colour?",
+        "Hi there! Change the triangle from blue to red to get through to the next level!",
+        TriangleComponent({ size: 40, color: 'green' }),
       ];
 
     case 2:
@@ -52,29 +52,35 @@ function getPageData(num: number): [string, string, JSX.Element] {
   }
 }
 
-
 const ProblemPage: FC<ProblemPageProps> = ({ params }) => {
   const { number } = params; // Extract the dynamic 'number' from the URL
-  var [title, description, comp] = getPageData(number)
+  var [title, description, comp] = getPageData(number);
   return (
     <Layout>
-      <div className="min-h-screen w-full bg-gray-50 flex flex-col items-center py-12 px-6">
-        {/* Main content with vertical spacing below the navbar */}
-        <main className="w-full max-w-7xl bg-white rounded-lg shadow-lg p-8 space-y-8 mt-16"> {/* Added mt-16 for vertical space */}
+      <GraphCanvas />
+
+      <div className="min-h-screen w-full bg-gray-50 flex flex-row justify-center py-12 px-6">
+        {/* Main Content Section */}
+        <main className="flex-1 max-w-6xl bg-white rounded-lg shadow-lg p-8 space-y-8 mx-6 h-full">
           {/* Banner Section */}
-          <div className="bg-gray-100 rounded-lg p-6 shadow-md">
-            <Banner title={title} description={description} smallBoxComponent={comp}/>
+          <div className="bg-gray-100 rounded-lg p-6 shadow-md opacity-100"> {/* Set opacity to 100 */}
+            <Banner title={title} description={description} smallBoxComponent={comp} />
           </div>
 
           {/* Canvas/Flow Section */}
           <div className="w-full">
-            <Flow number={number}/>
+            <Flow number={number} />
           </div>
-        
         </main>
+
+        {/* Sidebar Section */}
+        <aside className="w-72 bg-gray-200 p-4 h-full sticky top-0 flex flex-col">
+          <BottomDragBar />
+        </aside>
       </div>
     </Layout>
   );
 };
+
 
 export default ProblemPage;

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ReactNode, useState, useEffect } from "react";
 import { TypeEnum } from "./Type";
 import DataObject from "./data/DataObject";

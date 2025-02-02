@@ -12,6 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <NavBar />
       {/* Main Content Area */}
       <div className="flex-grow w-screen">
+        
         {children}
       </div>
     </div>

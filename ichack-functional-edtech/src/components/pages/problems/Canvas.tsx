@@ -7,7 +7,7 @@ import CustomNode from '@/components/nodes/CustomNode';
 import { MakeBlue, MakeGreen, MakeRed } from '@/components/nodes/functions/Colour';
 import { ShapeData } from '@/components/nodes/data/ShapeData';
 import React, { useCallback, useState, useEffect, useRef } from "react";
-import { ReactFlow, Background, Controls, useNodesState, useEdgesState, Connection, addEdge, useReactFlow, ReactFlowProvider, reconnectEdge } from "@xyflow/react";
+import { ReactFlow, Background, Controls, useNodesState, useEdgesState, Connection, addEdge, useReactFlow, ReactFlowProvider, reconnectEdge, getConnectedEdges } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { AnimatePresence, motion } from 'framer-motion';
 import { MultiplyByTwo } from '@/components/nodes/functions/Nats';
@@ -28,14 +28,14 @@ function createNodesFromObjects(objectNode1: DataObject, objectNode2: ObjectNode
     {
       id: "1",
       type: "customNode",
-      position: { x: 0, y: 0}, 
+      position: { x: 150, y: 150}, 
       data: { objectNode: objectNode1 },
       draggable: false, 
     },
     {
       id: "2",
       type: "customNode",
-      position: { x: 1150, y: 0 },
+      position: { x: 850, y: 150 },
       data: { objectNode: objectNode2 },
     },
   ];
@@ -47,12 +47,8 @@ function getStartNodes(num: number) {
   num = Number(num)
   switch (num) {
     case 1:
-      const objectNode1_1 = new NatData(1);
-      const objectNode1_2 = new NatData(2);
-      const objectNode1_3 = new NatData(3);
-      const objectNodeList1 = [objectNode1_1, objectNode1_2, objectNode1_3]
-      const objectNode7 = new ListData(objectNodeList1)
-      return createNodesFromObjects(objectNode7, EndNode());
+      const objectNode1_1 = new ShapeData(40, 'blue', ShapeEnum.TRIANGLE);
+      return createNodesFromObjects(objectNode1_1, EndNode());
 
     case 2:
       const objectNode2_1 = new ShapeData(10, 'red', ShapeEnum.CIRCLE);
@@ -104,7 +100,6 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();
-
   const [error, setError] = useState<{ message: string; position: { x: number; y: number } } | null>(null);
 
   const showError = (message: string, position: { x: number; y: number }) => {
@@ -130,7 +125,8 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
         if (sourceNode.data.objectNode.getOutputTypes().length > sourceIndex && sourceIndex >= 0) {
           var targetType = sourceNode.data.objectNode.getOutputTypes()[sourceIndex];
           if (targetNode.data.objectNode.canConnectToInput(targetType, targetIndex)) {
-            targetNode.data.objectNode.connectInput(sourceNode.data.objectNode, targetIndex);
+            targetNode.data.objectNode.connectInput(sourceNode.data.objectNode, targetIndex)
+            
             setEdges((eds) => addEdge(params, eds));
           } else {
             console.log(`${targetNode.position.x} and ${targetNode.position.y}`)
@@ -156,17 +152,51 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
 
     edgeReconnectSuccessful.current = false;
   }, []);
+
+  const onNodesDelete  = useCallback(( nodes: any) => {
+      const connectedEdges = getConnectedEdges(nodes, edges);
+      console.log(nodes)
+      // Iterate over each deleted node
+      nodes.forEach((deletedNode:any) => {
+        // Filter for outgoing edges where the deleted node is the source
+        const outgoingEdges = connectedEdges.filter(
+          (edge: any) => edge.source === deletedNode.id
+        );
+
+        // Iterate over each outgoing edge
+        outgoingEdges.forEach((edge: any) => {
+          const {a, b, c, targetHandle} = edge
+          const targetNode = nodes.find((node: any) => node.id == edge.target);
+          console.log("DSKJNFDSJK")
+          console.log(edge.target)
+          console.log(targetHandle)
+          console.log(targetNode)
+          console.log("DSKJNFDSJK")
+
+          if (targetNode && targetHandle) {
+            console.log("IN HERE")
+            const targetIndex = parseInt(targetHandle[targetHandle.length-1], 10)
+            targetNode.data.objectNode.removeInputAtIndex(targetIndex);
+          }
+          // Perform your desired logic here
+          // For example, you might want to remove or update related data
+        });
+      });
+  }, [nodes, setEdges]);
  
   const onReconnect = useCallback((oldEdge: any, newConnection: any) => {
     onConnect(newConnection)
+    // @ts-ignore
     setEdges((eds) => eds.filter((e) => e.id !== newConnection.id));
 
     edgeReconnectSuccessful.current = true;
+    // @ts-ignore
     setEdges((els) => reconnectEdge(oldEdge, newConnection, els));
   }, []);
  
   const onReconnectEnd = useCallback((oldEdge: any, edge: any) => {
     if (!edgeReconnectSuccessful.current) {
+      // @ts-ignore
       setEdges((eds) => eds.filter((e) => e.id !== edge.id));
     }
  
@@ -225,6 +255,7 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
               fontSize: "14px",
               fontWeight: "bold",
               backdropFilter: "blur(8px)",
+              zIndex: 1000,
             }}
           >
             {error.message}
@@ -233,7 +264,7 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
       </AnimatePresence>
   
       {/* ReactFlow Canvas (Takes full width) */}
-      <div className="flex-grow h-full mx-auto max-w-7xl" style={{ transform: 'translateX(-175px)' }}>
+      <div className="flex-grow h-full mx-auto max-w-5xl" style={{ transform: 'translateX(-300px)' }}>
         <div className="reactflow-wrapper w-full h-full" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}
@@ -243,6 +274,7 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
             onEdgesChange={onEdgesChange}
             onDrop={onDrop}
             onDragOver={onDragOver}
+            onNodesDelete={onNodesDelete} // Attach the onNodesDelete callback
             snapToGrid
             onReconnect={onReconnect}
             onReconnectStart={onReconnectStart}
@@ -256,10 +288,7 @@ const DnDFlow = ({ initialNodes }: DnDFlowProps) => {
           </ReactFlow>
         </div>
       </div>
-      {/* Sidebar (Right Panel) */}
-      <div className="w-72 bg-gray-200 p-4 h-screen">
-        <BottomDragBar />
-      </div>
+      
     </div>
   );
 }

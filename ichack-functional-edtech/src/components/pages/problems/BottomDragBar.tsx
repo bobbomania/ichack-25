@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { useDnD } from "./DnDContext";
 import { FuncEnum } from "@/components/nodes/Type";
@@ -35,7 +37,7 @@ const NodeList = () => {
         initial={{ width: 0, opacity: 0 }}
         animate={{ width: isOpen ? "24rem" : "0", opacity: isOpen ? 1 : 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className={`bg-white/30 backdrop-blur-xl p-8 rounded-l-3xl shadow-2xl flex flex-col space-y-6 border border-white/20 overflow-hidden ${
+        className={`bg-white/30 backdrop-blur-xl p-8 rounded-l-2xl shadow-2xl flex flex-col space-y-6 border border-white/20 overflow-hidden ${
           isOpen ? "w-96" : "w-0"
         }`}
       >
